@@ -1,0 +1,35 @@
+<p-card>
+  <span>
+    Proposal Type
+  <p-dropdown
+    [options]="proposalTypes"
+    [(ngModel)]="selectedProposalType"
+    (onChange)="onChangeProposalType()">
+  </p-dropdown>
+    </span>
+</p-card>
+<br>
+<app-text-proposal
+  (proposalId)="onProposalId($event)"
+  *ngIf="selectedProposalType === '/cosmos.gov.v1beta1.TextProposal'">
+</app-text-proposal>
+
+<app-software-upgrade-proposal
+  (proposalId)="onProposalId($event)"
+  *ngIf="selectedProposalType === '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'">
+</app-software-upgrade-proposal>
+
+<app-community-pool-spend-proposal
+  (proposalId)="onProposalId($event)"
+  *ngIf="selectedProposalType === '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal'">
+</app-community-pool-spend-proposal>
+
+<app-parameter-change-proposal
+  (proposalId)="onProposalId($event)"
+  *ngIf="selectedProposalType === '/cosmos.params.v1beta1.ParameterChangeProposal'">
+</app-parameter-change-proposal>
+
+<app-client-update-proposal
+  (proposalId)="onProposalId($event)"
+  *ngIf="selectedProposalType === '/ibc.core.client.v1.ClientUpdateProposal'">
+</app-client-update-proposal>

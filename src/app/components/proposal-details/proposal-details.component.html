@@ -1,0 +1,172 @@
+<div class="flex flex-column">
+  <ng-container *ngIf="proposal">
+    <p-card header="{{proposal.proposal_id}} - {{proposal.content.title}}">
+      <span class="flex">
+        <span class="flex-grow-1">Type</span>
+        <span class="flex-grow-0">{{Translator.proposalType[proposal.content['@type']]}}</span>
+      </span>
+      <hr>
+      <span class="flex">
+        <span class="flex-grow-1">Status</span>
+        <span class="flex-grow-0">
+                  <p-tag
+                    *ngIf="proposal.status === 'PROPOSAL_STATUS_PASSED'"
+                    severity="success"
+                    [value]="Translator.proposalStatus[proposal.status]"
+                    [rounded]="true"></p-tag>
+
+        <p-tag
+          *ngIf="proposal.status === 'PROPOSAL_STATUS_REJECTED'"
+          severity="danger"
+          [value]="Translator.proposalStatus[proposal.status]"
+          [rounded]="true"></p-tag>
+
+        <p-tag
+          *ngIf="proposal.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'"
+          severity="warning"
+          [value]="Translator.proposalStatus[proposal.status]"
+          [rounded]="true"></p-tag>
+        </span>
+      </span>
+      <hr>
+      <span class="flex">
+        <span class="flex-grow-1">Description</span>
+        <span class="flex-grow-0">{{proposal.content.description}}</span>
+      </span>
+      <hr>
+      <span class="flex">
+        <span class="flex-grow-1">Submit Timestamp</span>
+        <span class="flex-grow-0">{{proposal.submit_time | date: 'yyyy-MM-dd HH:mm Z'}}</span>
+      </span>
+      <hr>
+      <span class="flex">
+        <span class="flex-grow-1">Deposit End Timestamp</span>
+        <span class="flex-grow-0">{{proposal.deposit_end_time | date: 'yyyy-MM-dd HH:mm Z'}}</span>
+      </span>
+      <hr>
+      <span class="flex">
+        <span class="flex-grow-1">Voting Period</span>
+        <span class="flex-grow-0">
+          {{proposal.voting_start_time | date: 'yyyy-MM-dd HH:mm Z'}}
+          - {{proposal.voting_end_time | date: 'yyyy-MM-dd HH:mm Z'}}
+        </span>
+      </span>
+      <hr>
+      <span class="flex">
+        <span class="flex-grow-1">Deposit Amount</span>
+        <span class="flex-grow-0">
+          <ng-container *ngFor="let a of proposal.total_deposit">
+            <li>{{a.amount}} {{a.denom}}</li>
+          </ng-container>
+        </span>
+      </span>
+    </p-card>
+
+    <p-card
+      header="Community Pool Spend"
+      class="mt-2"
+      *ngIf="proposal.content['@type'] === '/cosmos.distribution.v1beta1.CommunityPoolSpendProposal'">
+
+      <span class="flex">
+        <span class="flex-grow-1">Recipient</span>
+        <span class="flex-grow-0">{{proposal.content.recipient}}</span>
+      </span>
+      <hr>
+
+      <span class="flex">
+        <span class="flex-grow-1">Amounts</span>
+        <span class="flex-grow-0">
+          <ng-container *ngFor="let a of proposal.content.amount">
+            <li>{{a.amount}} {{a.denom}}</li>
+          </ng-container>
+        </span>
+      </span>
+
+    </p-card>
+
+    <p-card
+      header="IBC Client Update"
+      class="mt-2"
+      *ngIf="proposal.content['@type'] === '/ibc.core.client.v1.ClientUpdateProposal'">
+
+      <span class="flex">
+        <span class="flex-grow-1">Subject Client ID</span>
+        <span class="flex-grow-0">{{proposal.content.subject_client_id}}</span>
+      </span>
+      <hr>
+
+      <span class="flex">
+        <span class="flex-grow-1">Substitute Client ID</span>
+        <span class="flex-grow-0">{{proposal.content.substitute_client_id}}</span>
+      </span>
+
+    </p-card>
+
+    <p-card
+      header="Blockchain Upgrade"
+      class="mt-2"
+      *ngIf="proposal.content['@type'] === '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal'">
+
+      <span class="flex">
+        <span class="flex-grow-1">Name</span>
+        <span class="flex-grow-0">{{proposal.content.plan.name}}</span>
+      </span>
+      <hr>
+
+      <span class="flex">
+        <span class="flex-grow-1">Time</span>
+        <span class="flex-grow-0">{{proposal.content.plan.time | date: 'yyyy-MM-dd HH:mm Z'}}</span>
+      </span>
+      <hr>
+
+      <span class="flex">
+        <span class="flex-grow-1">Height</span>
+        <span class="flex-grow-0">{{proposal.content.plan.height}}</span>
+      </span>
+      <hr>
+
+      <span class="flex">
+        <span class="flex-grow-1">Info</span>
+        <span class="flex-grow-0">{{proposal.content.plan.info}}</span>
+      </span>
+      <hr>
+
+      <span class="flex">
+        <span class="flex-grow-1">Upgraded Client State</span>
+        <span class="flex-grow-0">{{proposal.content.plan.upgraded_client_state}}</span>
+      </span>
+
+    </p-card>
+
+    <p-card
+      header="Blockchain Parameter Change"
+      class="mt-2"
+      *ngIf="proposal.content['@type'] === '/cosmos.params.v1beta1.ParameterChangeProposal'">
+
+      <p-table [value]="proposal.content.changes">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Subspace</th>
+            <th>Key</th>
+            <th>Value</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-change>
+          <tr>
+            <td>{{change.subspace}}</td>
+            <td>{{change.key}}</td>
+            <td><pre>{{change.value | json}}</pre></td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+    </p-card>
+
+    <p-card header="DEBUG" class="mt-2">
+      <pre>{{proposal | json}}</pre>
+    </p-card>
+
+  </ng-container>
+
+</div>

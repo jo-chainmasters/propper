@@ -1,0 +1,18 @@
+<p-card>
+
+  <span class="flex">
+    <span class="flex-grow-1">Deposit Amount</span>
+    <span class="flex-grow-0">
+      <p-inputNumber [(ngModel)]="amount" [showButtons]="true" [min]="0.000000001"></p-inputNumber>
+    </span>
+  </span>
+
+  <ng-template pTemplate="footer">
+      <button type="button" pButton label="Send Transaction" (click)="submit()"></button>
+  </ng-template>
+
+</p-card>
+
+<pre>
+  {{proposal | json}}
+</pre>

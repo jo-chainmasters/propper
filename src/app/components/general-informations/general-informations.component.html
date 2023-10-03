@@ -1,0 +1,86 @@
+<p-panel
+  header="The Governance Procedure">
+  <h2>Overview</h2>
+  <p>
+    In the current Unification governance implementation anyone can submit a proposal to the system.
+    A minimum deposit is required for a proposal to enter the voting period during which FUND holders will be able to
+    vote on whether the proposal is accepted or not.
+    The numbers used in the following are based on the parameters implemented on the Unification Blockchain.
+  </p>
+
+  <span style="text-align: center">
+    <img ngSrc="assets/governance.png" height="445" width="900" alt="">
+  </span>
+
+  <h2>Phase 1: The Deposit Period</h2>
+  <p>
+    For a proposal to be considered for voting, a minimum deposit of 10,000 FUND needs to be deposited within 2 weeks
+    from when the proposal was submitted. Any FUND holder can contribute to this deposit to support proposals, meaning
+    that the party submitting the proposal doesn’t necessarily need to provide the deposit itself. The deposit is
+    required as spam protection, FUND holders that contributed FUND to a proposal will be able to collect their deposit
+    when the proposal was accepted or when it did not reach the minimum threshold after 2 weeks.
+  </p>
+
+  <h2>Phase 2: The Voting Period</h2>
+  <p>
+    When the minimum deposit for a particular proposal is reached the 2 week (336h) long voting period begins. During
+    this period, FUND holders are able to cast their vote on that proposal. There are 4 voting options (“Yes”, “No”, “No
+    with Veto”, “Abstain”). Important details in the governance implementation of Unification are:
+  </p>
+
+  <ul>
+    <li>Only staked (bonded) tokens can participate in governance.</li>
+    <li>Voting power is measured in terms of stake. The number of FUND you stake determine your influence on the
+      decision (coin voting).
+    </li>
+    <li>Delegators inherit the vote of the validators they are delegated to unless they cast their own vote, which will
+      overwrite validator decisions.
+    </li>
+  </ul>
+
+  <h2>Phase 3: Tallying Results</h2>
+  <p>
+    If a proposal is accepted depends on the result of the coin voting by FUND holders. The following requirements need
+    to be satisfied for a proposal to be considered accepted:
+  </p>
+
+  <ul>
+    <li>Quorum: More than 40% of the total staked FUND at the end of the voting period need to have participated in the
+      vote.
+    </li>
+    <li>Threshold: More than 50% of FUND that participated in the vote (after excluding “Abstain” votes) need to have
+      voted in favor of the proposal (“Yes”).
+    </li>
+    <li>Veto: Less than 33.4% of the tokens that participated in the vote (after excluding “Abstain” votes) need to have
+      vetoed the decision (“No with Veto”).
+    </li>
+  </ul>
+
+  <p>
+    If one of these requirements is not met at the end of the voting period, e.g. because the quorum was not met, the
+    proposal is denied.
+    As a result, the deposit associated with the denied proposal will not be refunded and instead be awarded to the
+    community pool.
+  </p>
+
+  <h2>Phase 4: Implementing the Proposal</h2>
+  <p>
+    An accepted proposal will need to be implemented as part of the software that is run by the networks’ validators.
+    There are many different types of proposals. Here are a list of the most important proposal types:
+  </p>
+
+  <ul>
+    <li>Text proposals: Text proposals contains a title and a description text. They cant be automatically implemented
+      by the Blockchain. They can be used for nearly all kind of proposals. But to change some technically stuff on the
+      blockchain other types of proposal maybe fits better. Like "Parameter change proposals".
+    </li>
+    <li>Parameter change proposals: With this type of proposal parameters of the Unification Blockchain can be adjusted.
+      For example: "max deposit phase duration". If such a proposal is successfull, the Blockchain will change the
+      parameter automatically.
+    </li>
+    <li>Community Pool Spend Proposal. This type of proposal is used withdram FUND from the Community Pool. The proposal
+      contains the amount and receiver address. If such a propsal is successfull, then the Blockchain will withdraw the
+      given amount automatically to the receiver address
+    </li>
+  </ul>
+</p-panel>

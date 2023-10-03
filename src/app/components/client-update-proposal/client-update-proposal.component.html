@@ -1,0 +1,30 @@
+<p-card header="New text proposal">
+  <div class="flex flex-column gap-2">
+    <label htmlFor="propTitle">Title</label>
+    <input id="propTitle" class="col-12" type="text" pInputText [(ngModel)]="propTitle">
+  </div>
+
+  <div class="flex flex-column gap-2 mt-4">
+    <label htmlFor="propText">Text</label>
+    <textarea id="propText" class="col-12" rows="10" cols="50" pInputText [(ngModel)]="propText"></textarea>
+  </div>
+
+  <div class="flex flex-column gap-2">
+    <label htmlFor="propSubjectClientId">Subject Client ID</label>
+    <input id="propSubjectClientId" class="col-12" type="text" pInputText [(ngModel)]="propSubjectClientId">
+  </div>
+
+  <div class="flex flex-column gap-2">
+    <label htmlFor="propSubstituteClientId">Substitue Client ID</label>
+    <input id="propSubstituteClientId" class="col-12" type="text" pInputText [(ngModel)]="propSubstituteClientId">
+  </div>
+
+  <div class="flex flex-column gap-2 mt-4">
+    <label htmlFor="propDeposit">Initial Deposit</label>
+    <input id="propDeposit" class="col-12" type="text" pInputText [(ngModel)]="propDeposit">
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Send" icon="pi pi-check" (onClick)="send()"></p-button>
+  </ng-template>
+</p-card>
