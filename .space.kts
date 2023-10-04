@@ -11,6 +11,16 @@ job("Hello World!") {
         	npm install
         	./node_modules/@angular/cli/bin/ng.js build
         """
-        }
+        },
+        
+      kotlinScript { api ->
+        api.space().projects.automation.deployments.start(
+            project = api.projectIdentifier(),
+            targetIdentifier = TargetIdentifier.Key("test-deployment"),
+            version = "1.0.0",
+            // automatically update deployment status based on a status of a job
+            syncWithAutomationJob = true
+        )
+      }
     }
 }
