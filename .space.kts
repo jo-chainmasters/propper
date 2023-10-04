@@ -10,5 +10,6 @@ job("Hello World!") {
         content = """
         	npm run build
         """
+        }
     }
 }
