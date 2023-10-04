@@ -11,7 +11,7 @@ job("Hello World!") {
         	npm install
         	./node_modules/@angular/cli/bin/ng.js build
         """
-        },
+        };
         
       kotlinScript { api ->
         api.space().projects.automation.deployments.start(
