@@ -18,6 +18,8 @@ export class ProposalListComponent implements OnInit {
   public depositDialogVisible = false;
   public submitProposalDialogVisible = false;
   public voteDialogVisible = false;
+  public proposalDetailsDialogVisible = false;
+  public infoDialogVisible = false;
 
   public availableNetworks: any[] = [];
 
@@ -26,16 +28,16 @@ export class ProposalListComponent implements OnInit {
     {
       label: 'Chainmasters Proposal Management'
     },
-    {
-      routerLink: '/',
-      icon: 'pi pi-home'
-    },
+    // {
+    //   routerLink: '/',
+    //   icon: 'pi pi-list'
+    // },
     {
       command: () => {this.submitProposalDialogVisible = true},
       icon: 'pi pi-plus'
     },
     {
-      routerLink: '/infos',
+      command: () => {this.infoDialogVisible = true},
       icon: 'pi pi-info'
     }
   ];
@@ -61,6 +63,12 @@ export class ProposalListComponent implements OnInit {
   public onClickDeposit(proposal: any) {
     this.selectedProposal = proposal;
     this.depositDialogVisible = true;
+  }
+
+  public onClickProposal(proposal: any) {
+    this.selectedProposal = proposal;
+    this.proposalDetailsDialogVisible = true;
+
   }
 
   public onResult(result: TxResult) {

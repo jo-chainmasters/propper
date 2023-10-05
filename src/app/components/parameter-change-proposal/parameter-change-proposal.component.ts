@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {KeplrService} from "../../services/keplr.service";
 import {BaseProposalComponent} from "../BaseProposalComponent";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-parameter-change-proposal',
@@ -9,7 +10,7 @@ import {BaseProposalComponent} from "../BaseProposalComponent";
 })
 export class ParameterChangeProposalComponent extends BaseProposalComponent {
 
-  constructor(private keplrService: KeplrService) {
+  constructor(private keplrService: KeplrService, private messageService: MessageService) {
     super();
   }
 
@@ -25,8 +26,16 @@ export class ParameterChangeProposalComponent extends BaseProposalComponent {
 
   public send(){
     this.keplrService.submitParamChangeProposal(this.propTitle, this.propText, this.propSubspace, this.propKey, this.propValue, this.propDeposit).subscribe(result => {
-      const proposalId = this.getProposalId(result.transaction.events);
-      this.proposalId.emit(proposalId);
+      if(result.success) {
+        const proposalId = this.getProposalId(result.transaction.events);
+        this.proposalId.emit(proposalId);
+      } else {
+        this.messageService.add({key: 'error', severity: 'error', summary: 'Error', detail: result.errorText});
+      }
     });
+  }
+
+  public get sendDisabled(): boolean {
+    return !(this.propTitle && this.propText && this.propDeposit && this.propSubspace && this.propKey && this.propValue);
   }
 }

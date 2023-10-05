@@ -1,30 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, ParamMap} from "@angular/router";
 import {KeplrService} from "../../services/keplr.service";
 import {Translator} from "../../util/Translator";
+import {NetworkService} from "../../services/network.service";
 
 @Component({
   selector: 'app-proposal-details',
   templateUrl: './proposal-details.component.html',
   styleUrls: ['./proposal-details.component.css']
 })
-export class ProposalDetailsComponent implements OnInit {
+export class ProposalDetailsComponent {
 
-  public proposal: any;
+  private _proposal: any;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private keplrService: KeplrService
-  ) { }
-
-  ngOnInit(): void {
-    this.activatedRoute.paramMap.subscribe(async (params: ParamMap) => {
-      await this.loadProposal(params.get('id') as string);
-    });
+  @Input()
+  public set proposal(proposal: any) {
+    this._proposal = proposal;
   }
 
-  public async loadProposal(id: string) {
-    this.proposal = (await this.keplrService.getProposal(id)).proposal;
+  public get proposal() {
+    return this._proposal;
+  }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private keplrService: KeplrService,
+    public networkService: NetworkService
+  ) { }
+
+  public getDepositAmount(amount: number) {
+    const pow = 10 ** this.networkService.selectedNetwork.stakeCurrency.coinDecimals;
+    return amount / pow;
   }
 
   protected readonly Translator = Translator;

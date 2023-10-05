@@ -30,7 +30,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-prop>
     <tr>
-      <td><a [routerLink]="'details/' + prop.proposal_id">{{prop.proposal_id}}</a></td>
+      <td><a (click)="onClickProposal(prop)" href="#">{{prop.proposal_id}}</a></td>
       <td>{{prop.submit_time | date: 'yyyy-MM-dd HH:mm Z'}}</td>
       <td>{{Translator.proposalType[prop.content['@type']]}}</td>
       <td>{{prop.content.title}}</td>
@@ -38,6 +38,12 @@
         <p-tag
           *ngIf="prop.status === 'PROPOSAL_STATUS_PASSED'"
           severity="success"
+          [value]="Translator.proposalStatus[prop.status]"
+          [rounded]="true"></p-tag>
+
+        <p-tag
+          *ngIf="prop.status === 'PROPOSAL_STATUS_VOTING_PERIOD'"
+          severity="info"
           [value]="Translator.proposalStatus[prop.status]"
           [rounded]="true"></p-tag>
 
@@ -65,6 +71,7 @@
 </p-table>
 
 <p-dialog
+  [style]="{width: '50vw'}"
   header="Submit new Proposal"
   [(visible)]="submitProposalDialogVisible"
   [modal]="true">
@@ -76,11 +83,27 @@
 </p-dialog>
 
 <p-dialog header="Vote on a Proposal" [(visible)]="voteDialogVisible">
-
   <ng-template pTemplate="footer">
     <button type="button" pButton label="YES" (click)="vote(VoteOption.VOTE_OPTION_YES)"></button>
     <button type="button" pButton label="NO" (click)="vote(VoteOption.VOTE_OPTION_NO)"></button>
     <button type="button" pButton label="ABSTAIN" (click)="vote(VoteOption.VOTE_OPTION_ABSTAIN)"></button>
     <button type="button" pButton label="NO WITH VETO" (click)="vote(VoteOption.VOTE_OPTION_NO_WITH_VETO)"></button>
   </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Proposal Details"
+  [modal]="true"
+  [(visible)]="proposalDetailsDialogVisible"
+  [style]="{width: '50vw'}">
+
+  <app-proposal-details [proposal]="selectedProposal"></app-proposal-details>
+</p-dialog>
+
+<p-dialog
+  header="The Governance Procedure"
+  [modal]="true"
+  [(visible)]="infoDialogVisible"
+  [style]="{width: '50vw'}">
+  <app-general-informations></app-general-informations>
 </p-dialog>

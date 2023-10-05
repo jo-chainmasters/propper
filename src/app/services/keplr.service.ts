@@ -204,12 +204,13 @@ export class KeplrService {
   }
 
   private submitProposal(proposal: any, depositAmount: number): Observable<TxResult> {
+    const pow = 10 ** this.networkService.selectedNetwork.stakeCurrency.coinDecimals;
     const prop = {
       proposer: this.account?.address.toString(),
       initialDeposit: [
         {
-          denom: 'nund',
-          amount: '1'
+          denom: this.networkService.selectedNetwork.stakeCurrency.coinMinimalDenom,
+          amount: '' + (depositAmount * pow)
         }
       ],
       content: proposal

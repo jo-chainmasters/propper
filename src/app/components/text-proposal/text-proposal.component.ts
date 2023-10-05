@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {BaseProposalComponent} from "../BaseProposalComponent";
 import {KeplrService} from "../../services/keplr.service";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-text-proposal',
@@ -9,7 +10,10 @@ import {KeplrService} from "../../services/keplr.service";
 })
 export class TextProposalComponent extends BaseProposalComponent {
 
-  constructor(private keplrService: KeplrService) {
+  constructor(
+    private keplrService: KeplrService,
+    private messageService: MessageService
+  ) {
     super();
   }
 
@@ -25,9 +29,14 @@ export class TextProposalComponent extends BaseProposalComponent {
   public propDeposit = 1;
 
   public send(){
+    // TODO check account balance for deposit amount
     this.keplrService.submitTextProposal(this.propTitle, this.propText, this.propDeposit).subscribe(result => {
-      const proposalId = this.getProposalId(result.transaction.events);
-      this.proposalId.emit(proposalId);
+      if(result.success) {
+        const proposalId = this.getProposalId(result.transaction.events);
+        this.proposalId.emit(proposalId);
+      } else {
+        this.messageService.add({key: 'error', severity: 'error', summary: 'Error', detail: result.errorText});
+      }
     });
   }
 }

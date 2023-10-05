@@ -34,6 +34,8 @@ import { GeneralInformationsComponent } from './components/general-informations/
 import {PanelModule} from "primeng/panel";
 import {NgOptimizedImage} from "@angular/common";
 import {SplitButtonModule} from "primeng/splitbutton";
+import {MessageModule} from "primeng/message";
+import {MarkdownModule} from "ngx-markdown";
 
 @NgModule({
   declarations: [
@@ -50,28 +52,30 @@ import {SplitButtonModule} from "primeng/splitbutton";
     ClientUpdateProposalComponent,
     GeneralInformationsComponent
   ],
-    imports: [
-        RouterOutlet,
-        AppRoutingModule,
-        BrowserModule,
-        HttpClientModule,
-        InputTextareaModule,
-        InputTextModule,
-        FormsModule,
-        CardModule,
-        ButtonModule,
-        BrowserAnimationsModule,
-        DropdownModule,
-        TableModule,
-        TagModule,
-        DialogModule,
-        InputNumberModule,
-        MessagesModule,
-        MenubarModule,
-        PanelModule,
-        NgOptimizedImage,
-        SplitButtonModule
-    ],
+  imports: [
+    RouterOutlet,
+    AppRoutingModule,
+    BrowserModule,
+    HttpClientModule,
+    InputTextareaModule,
+    InputTextModule,
+    FormsModule,
+    CardModule,
+    ButtonModule,
+    BrowserAnimationsModule,
+    DropdownModule,
+    TableModule,
+    TagModule,
+    DialogModule,
+    InputNumberModule,
+    MessagesModule,
+    MenubarModule,
+    PanelModule,
+    NgOptimizedImage,
+    SplitButtonModule,
+    MessageModule,
+    MarkdownModule.forRoot(),
+  ],
   providers: [HttpClientModule, HttpClient, MessageService],
   bootstrap: []
 })

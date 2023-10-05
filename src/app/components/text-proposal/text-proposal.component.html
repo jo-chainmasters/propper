@@ -11,7 +11,7 @@
 
   <div class="flex flex-column gap-2 mt-4">
     <label htmlFor="propDeposit">Initial Deposit in FUND (required)</label>
-    <input id="propDeposit" class="col-12" [required]="true" type="text" pInputText [(ngModel)]="propDeposit">
+    <p-inputNumber id="propDeposit" class="col-12" [required]="true" [(ngModel)]="propDeposit"></p-inputNumber>
   </div>
 
   <ng-template pTemplate="footer">

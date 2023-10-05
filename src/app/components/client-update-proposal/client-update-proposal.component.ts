@@ -28,4 +28,8 @@ export class ClientUpdateProposalComponent extends BaseProposalComponent {
       this.proposalId.emit(proposalId);
     });
   }
+
+  public get sendDisabled(): boolean {
+    return !(this.propTitle && this.propText && this.propDeposit && this.propSubstituteClientId && this.propSubjectClientId);
+  }
 }

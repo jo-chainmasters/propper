@@ -14,10 +14,12 @@ export class NewProposalComponent implements OnInit {
   public selectedProposalType = '/cosmos.gov.v1beta1.TextProposal';
   constructor(private messageService: MessageService, private router: Router) {
     for (let key of Object.keys(Translator.proposalType)) {
-      this.proposalTypes.push({
-        label: Translator.proposalType[key],
-        value: key
-      })
+      if(key !== '/cosmos.upgrade.v1beta1.SoftwareUpgradeProposal') {
+        this.proposalTypes.push({
+          label: Translator.proposalType[key],
+          value: key
+        });
+      }
     }
   }
 

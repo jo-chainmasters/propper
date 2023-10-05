@@ -10,7 +10,8 @@ export class Translator {
   public static proposalStatus: {[key: string]: string} = {
     'PROPOSAL_STATUS_PASSED': 'Passed',
     'PROPOSAL_STATUS_REJECTED': 'Rejected',
-    'PROPOSAL_STATUS_DEPOSIT_PERIOD': 'Deposit'
+    'PROPOSAL_STATUS_DEPOSIT_PERIOD': 'Deposit Phase',
+    'PROPOSAL_STATUS_VOTING_PERIOD': 'Voting Phase'
   };
 
   // public static translate(map: string, key: string) {
