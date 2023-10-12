@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MenuItem, MessageService} from "primeng/api";
 import {Translator} from "../../util/Translator";
 import {Router} from "@angular/router";
@@ -9,6 +9,9 @@ import {Router} from "@angular/router";
   styleUrls: ['./new-proposal.component.css']
 })
 export class NewProposalComponent implements OnInit {
+
+  @Output()
+  public onSuccess: EventEmitter<number> = new EventEmitter<number>();
 
   public proposalTypes: any[] = [];
   public selectedProposalType = '/cosmos.gov.v1beta1.TextProposal';
@@ -31,13 +34,7 @@ export class NewProposalComponent implements OnInit {
   }
 
   public onProposalId(proposalId: number) {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Successfully submitted proposal',
-      detail: 'ID: ' + proposalId + ' - Redirecting to details...'
-    });
-    setTimeout(() => {
-      this.router.navigateByUrl('/details/' + proposalId);
-    }, 2000)
+    this.onSuccess.emit(proposalId);
+    this.selectedProposalType = '/cosmos.gov.v1beta1.TextProposal';
   }
 }

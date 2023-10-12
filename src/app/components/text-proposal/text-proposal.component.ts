@@ -34,9 +34,16 @@ export class TextProposalComponent extends BaseProposalComponent {
       if(result.success) {
         const proposalId = this.getProposalId(result.transaction.events);
         this.proposalId.emit(proposalId);
+        this.resetValues();
       } else {
         this.messageService.add({key: 'error', severity: 'error', summary: 'Error', detail: result.errorText});
       }
     });
+  }
+
+  private resetValues() {
+    this.propDeposit = 1;
+    this.propText = '';
+    this.propTitle = '';
   }
 }

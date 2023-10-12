@@ -25,10 +25,12 @@ export class ParameterChangeProposalComponent extends BaseProposalComponent {
   public propValue = '';
 
   public send(){
+    // TODO check account balance for deposit amount
     this.keplrService.submitParamChangeProposal(this.propTitle, this.propText, this.propSubspace, this.propKey, this.propValue, this.propDeposit).subscribe(result => {
       if(result.success) {
         const proposalId = this.getProposalId(result.transaction.events);
         this.proposalId.emit(proposalId);
+        this.resetValues();
       } else {
         this.messageService.add({key: 'error', severity: 'error', summary: 'Error', detail: result.errorText});
       }
@@ -37,5 +39,14 @@ export class ParameterChangeProposalComponent extends BaseProposalComponent {
 
   public get sendDisabled(): boolean {
     return !(this.propTitle && this.propText && this.propDeposit && this.propSubspace && this.propKey && this.propValue);
+  }
+
+  private resetValues() {
+    this.propDeposit = 1;
+    this.propText = '';
+    this.propTitle = '';
+    this.propSubspace = '';
+    this.propKey = '';
+    this.propValue = '';
   }
 }

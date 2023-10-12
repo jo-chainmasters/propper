@@ -5,36 +5,33 @@ import {fromBase64, fromAscii} from "@cosmjs/encoding";
 import {
   AccountData,
   BroadcastMode,
-  ChainInfo, Coin,
+  Coin,
   Keplr,
   OfflineDirectSigner,
   StdFee,
   Window as KeplrWindow
 } from "@keplr-wallet/types";
 import {Attribute, SigningStargateClient} from "@cosmjs/stargate";
-import {MsgDeposit, MsgSubmitProposal} from "../../proto-types-gen/src/cosmos/gov/v1beta1/tx";
-import {TextProposal, Vote, VoteOption} from "../../proto-types-gen/src/cosmos/gov/v1beta1/gov";
-import {Any} from "../../proto-types-gen/src/google/protobuf/any";
-import {AuthInfo, Fee, TxBody, TxRaw} from "../../proto-types-gen/src/cosmos/tx/v1beta1/tx";
-import {PubKey} from "../../proto-types-gen/src/cosmos/crypto/secp256k1/keys";
-import {SignMode} from "../../proto-types-gen/src/cosmos/tx/signing/v1beta1/signing";
 import Long from "long";
 import {Buffer} from "buffer";
 import {TendermintTxTracer} from "@keplr-wallet/cosmos";
 import {AccountResponse} from "../types/account";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {observable, Observable, Subscriber} from "rxjs";
+import {Observable, Subscriber} from "rxjs";
 import {TxResult} from "../util/TxResult";
 import {NetworkService} from "./network.service";
 import {NetworkInfo} from "../util/NetworkInfo";
-import {
-  CommunityPoolSpendProposalComponent
-} from "../components/community-pool-spend-proposal/community-pool-spend-proposal.component";
-import {CommunityPoolSpendProposal} from "../../proto-types-gen/src/cosmos/distribution/v1beta1/distribution";
-import {SoftwareUpgradeProposal} from "../../proto-types-gen/src/cosmos/upgrade/v1beta1/upgrade";
-import {ClientUpdateProposalComponent} from "../components/client-update-proposal/client-update-proposal.component";
-import {ClientUpdateProposal} from "../../proto-types-gen/src/ibc/core/client/v1/client";
-import {ParameterChangeProposal} from "../../proto-types-gen/src/cosmos/params/v1beta1/params";
+import {MsgDeposit, MsgSubmitProposal} from "../../proto_ts/cosmos/gov/v1/tx";
+import {TextProposal, Vote} from "../../proto_ts/cosmos/gov/v1beta1/gov";
+import {SoftwareUpgradeProposal} from "../../proto_ts/cosmos/upgrade/v1beta1/upgrade";
+import {VoteOption} from "../../proto_ts/cosmos/gov/v1/gov";
+import {ParameterChangeProposal} from "../../proto_ts/cosmos/params/v1beta1/params";
+import {CommunityPoolSpendProposal} from "../../proto_ts/cosmos/distribution/v1beta1/distribution";
+import {AuthInfo, Fee, Tip, TxBody, TxRaw} from "../../proto_ts/cosmos/tx/v1beta1/tx";
+import {Any} from "../../proto_ts/google/protobuf/any";
+import {PubKey} from "../../proto_ts/cosmos/crypto/secp256k1/keys";
+import {SignMode} from "../../proto_ts/cosmos/tx/signing/v1beta1/signing";
+import {ClientUpdateProposal} from "../../proto_ts/ibc/core/client/v1/client";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -138,7 +135,7 @@ export class KeplrService {
     return await this.http.get<any>(this.networkService.selectedNetwork.restAPIs[0].url + path).toPromise();
   }
 
-  private refreshProposalList() {
+  public refreshProposalList() {
     const path = '/cosmos/gov/v1beta1/proposals';
     let params = new HttpParams();
     params = params.append('pagination.limit', '5');
@@ -205,7 +202,7 @@ export class KeplrService {
 
   private submitProposal(proposal: any, depositAmount: number): Observable<TxResult> {
     const pow = 10 ** this.networkService.selectedNetwork.stakeCurrency.coinDecimals;
-    const prop = {
+    const prop: MsgSubmitProposal = {
       proposer: this.account?.address.toString(),
       initialDeposit: [
         {
@@ -213,7 +210,10 @@ export class KeplrService {
           amount: '' + (depositAmount * pow)
         }
       ],
-      content: proposal
+      metadata: '',
+      messages: [
+        proposal
+      ]
     }
 
     const msg = {
@@ -276,9 +276,9 @@ export class KeplrService {
         description,
         plan: {
           name,
-          height: '' + height,
-          time: undefined,
-          upgradedClientState: undefined,
+          time: null,
+          upgradedClientState: null,
+          height: BigInt(height),
           info
         }
       }).finish()
@@ -288,39 +288,40 @@ export class KeplrService {
   }
 
   public submitVote(proposal_id: number, vote: VoteOption) {
-    // const voteMsg = {
-    //   typeUrl: '/cosmos.gov.v1beta1.MsgVote',
-    //   value: Vote.encode({
-    //     proposalId: '' + proposal_id,
-    //     option: null,
-    //     options: [
-    //       {
-    //         option: vote,
-    //         weight: '1'
-    //       }
-    //     ],
-    //     voter: this.account?.address.toString()
-    //   }).finish()
-    // };
-    //
-    // let obs = new Observable<TxResult>(observer => {
-    //   this.window?.keplr?.getKey(this.networkService.selectedNetwork.chainId).then(key => {
-    //
-    //     if (this.window?.keplr && key) {
-    //       this.sendMsgs(
-    //         this.window?.keplr,
-    //         key.bech32Address,
-    //         [voteMsg],
-    //         this.defaultFee
-    //       ).subscribe(res => {
-    //         observer.next(res);
-    //       });
-    //     } else {
-    //       observer.next({success: false, errorCode: -1, errorText: 'General Error', transaction: null});
-    //     }
-    //   });
-    // });
-    // return obs;
+    const voteMsg = {
+      typeUrl: '/cosmos.gov.v1beta1.MsgVote',
+      value: Vote.encode({
+        proposalId: BigInt(proposal_id),
+        option:  vote,
+        options: [],
+        // options: [
+        //   {
+        //     option: vote,
+        //     weight: '1'
+        //   }
+        // ],
+        voter: this.account?.address.toString()
+      }).finish()
+    };
+
+    let obs = new Observable<TxResult>(observer => {
+      this.window?.keplr?.getKey(this.networkService.selectedNetwork.chainId).then(key => {
+
+        if (this.window?.keplr && key) {
+          this.sendMsgs(
+            this.window?.keplr,
+            key.bech32Address,
+            [voteMsg],
+            this.defaultFee
+          ).subscribe(res => {
+            observer.next(res);
+          });
+        } else {
+          observer.next({success: false, errorCode: -1, errorText: 'General Error', transaction: null});
+        }
+      });
+    });
+    return obs;
   }
 
   public submitParamChangeProposal(title: string, description: string, subspace: string, key: string, value: string, initialDeposit: number) {
@@ -385,6 +386,7 @@ export class KeplrService {
                 })
               ).finish(),
               authInfoBytes: AuthInfo.encode({
+                tip: Tip.fromPartial({}),
                 signerInfos: [
                   {
                     publicKey: {
@@ -399,7 +401,7 @@ export class KeplrService {
                       },
                       multi: undefined,
                     },
-                    sequence: account.sequence,
+                    sequence: BigInt(account.sequence),
                   },
                 ],
                 fee: Fee.fromPartial({
@@ -409,7 +411,7 @@ export class KeplrService {
                       amount: coin.amount.toString(),
                     };
                   }),
-                  gasLimit: fee.gas,
+                  gasLimit: BigInt(fee.gas),
                 }),
               }).finish(),
               chainId: this.networkService.selectedNetwork.chainId,

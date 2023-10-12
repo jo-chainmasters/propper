@@ -4,7 +4,8 @@ import {Translator} from "../../util/Translator";
 import {MenuItem, MessageService} from "primeng/api";
 import {TxResult} from "../../util/TxResult";
 import {NetworkService} from "../../services/network.service";
-import {VoteOption} from "../../../proto-types-gen/src/cosmos/gov/v1beta1/gov";
+import {VoteOption} from "../../../proto_ts/cosmos/gov/v1/gov";
+import {ProposalStatus} from "../../../proto_ts/cosmos/gov/v1beta1/gov";
 
 @Component({
   selector: 'app-proposal-list',
@@ -93,16 +94,32 @@ export class ProposalListComponent implements OnInit {
   }
 
   public vote(vote: VoteOption) {
-    // this.keplrService.submitVote(this.selectedProposal.proposal_id, vote).subscribe(result => {
-    //   console.log(result);
-    //   this.voteDialogVisible = false;
-    // })
+    this.keplrService.submitVote(this.selectedProposal.proposal_id, vote).subscribe(result => {
+      console.log(result);
+      this.voteDialogVisible = false;
+    })
   }
 
   public onClickVote(proposal: any) {
     this.selectedProposal = proposal;
     this.voteDialogVisible = true;
+  }
 
+  public onSuccessSubmitProposal(proposalId: number) {
+    this.keplrService.refreshProposalList();
+    setTimeout(() => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Successfully submitted proposal ' + proposalId
+      });
+      this.selectedProposal = this.getProposalById(proposalId);
+      this.submitProposalDialogVisible = false;
+      this.onClickProposal(this.selectedProposal);
+    }, 1000)
+  }
+
+  private getProposalById(proposalId): any {
+    return this.proposals.find(p => p.proposal_id === proposalId);
   }
 
   protected readonly Translator = Translator;

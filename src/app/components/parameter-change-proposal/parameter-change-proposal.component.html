@@ -1,7 +1,7 @@
 <p-card header="New text proposal">
   <div class="flex flex-column gap-2">
     <label htmlFor="propTitle">Title (required)</label>
-    <input id="propTitle" class="col-12" type="text" pInputText [(ngModel)]="propTitle">
+    <input id="propTitle" class="col-12" [required]="true" type="text" pInputText [(ngModel)]="propTitle">
   </div>
 
   <div class="flex flex-column gap-2 mt-4">
@@ -12,18 +12,18 @@
   <div class="flex flex-column gap-2 mt-4">
     <!-- TODO Replace textfield with drop-down -->
     <label htmlFor="propSubspace">Subspace (required)</label>
-    <input id="propSubspace" class="col-12" type="text" pInputText [(ngModel)]="propSubspace">
+    <input id="propSubspace" class="col-12" [required]="true" type="text" pInputText [(ngModel)]="propSubspace">
   </div>
 
   <div class="flex flex-column gap-2 mt-4">
     <!-- TODO Replace textfield with drop-down -->
     <label htmlFor="propKey">Key (required)</label>
-    <input id="propKey" class="col-12" type="text" pInputText [(ngModel)]="propKey">
+    <input id="propKey" class="col-12" [required]="true" type="text" pInputText [(ngModel)]="propKey">
   </div>
 
   <div class="flex flex-column gap-2 mt-4">
     <label htmlFor="propValue">Value (required)</label>
-    <input id="propValue" class="col-12" type="text" pInputText [(ngModel)]="propValue">
+    <input id="propValue" class="col-12" [required]="true" type="text" pInputText [(ngModel)]="propValue">
   </div>
 
   <div class="flex flex-column gap-2 mt-4">

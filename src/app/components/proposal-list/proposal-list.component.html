@@ -62,8 +62,7 @@
       </td>
       <td>
         <button *ngIf="prop.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" type="button" pButton label="Deposit FUND" (click)="onClickDeposit(prop)"></button>
-<!--        <button type="button" pButton label="Vote" (click)="onClickVote(prop)"></button>-->
-<!--        <p-splitButton label="Click for Vote" [model]="this.voteItems" styleClass="p-button-rounded mr-2 mb-2"></p-splitButton>-->
+        <button *ngIf="prop.status === 'PROPOSAL_STATUS_VOTING_PERIOD'" type="button" pButton label="Vote" (click)="onClickVote(prop)"></button>
 
       </td>
     </tr>
@@ -75,7 +74,7 @@
   header="Submit new Proposal"
   [(visible)]="submitProposalDialogVisible"
   [modal]="true">
-  <app-new-proposal></app-new-proposal>
+  <app-new-proposal (onSuccess)="onSuccessSubmitProposal($event)"></app-new-proposal>
 </p-dialog>
 
 <p-dialog header="Deposit to Proposal" [(visible)]="depositDialogVisible">
