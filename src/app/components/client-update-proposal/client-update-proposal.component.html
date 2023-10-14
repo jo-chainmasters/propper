@@ -1,7 +1,7 @@
 <p-card header="New text proposal">
   <div class="flex flex-column gap-2">
     <label htmlFor="propTitle">Title (required)</label>
-    <input id="propTitle" class="col-12" type="text" pInputText [(ngModel)]="propTitle">
+    <input id="propTitle" class="col-12" type="text" [required]="true" pInputText [(ngModel)]="propTitle">
   </div>
 
   <div class="flex flex-column gap-2 mt-4">
@@ -11,12 +11,12 @@
 
   <div class="flex flex-column gap-2 mt-4">
     <label htmlFor="propSubjectClientId">Subject Client ID (required)</label>
-    <input id="propSubjectClientId" class="col-12" type="text" pInputText [(ngModel)]="propSubjectClientId">
+    <input id="propSubjectClientId" class="col-12" [required]="true" type="text" pInputText [(ngModel)]="propSubjectClientId">
   </div>
 
   <div class="flex flex-column gap-2 mt-4">
     <label htmlFor="propSubstituteClientId">Substitue Client ID (required)</label>
-    <input id="propSubstituteClientId" class="col-12" type="text" pInputText [(ngModel)]="propSubstituteClientId">
+    <input id="propSubstituteClientId" class="col-12" [required]="true" type="text" pInputText [(ngModel)]="propSubstituteClientId">
   </div>
 
   <div class="flex flex-column gap-2 mt-4">

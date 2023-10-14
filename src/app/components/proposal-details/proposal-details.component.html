@@ -84,7 +84,7 @@
       <span class="flex">
         <span class="flex-grow-1">Amounts</span>
         <span class="flex-grow-0">
-          <li>{{getDepositAmount(proposal.content.amount[0].amount)}} {{networkService.selectedNetwork.stakeCurrency.coinDenom}}</li>
+          <li>{{getDepositAmount(proposal.content.amount[0]?.amount)}} {{networkService.selectedNetwork.stakeCurrency.coinDenom}}</li>
         </span>
       </span>
 
@@ -172,8 +172,13 @@
 
     </p-card>
 
+    <p-card header="Tally" class="mt-2" *ngIf="showTally">
+      <p-chart type="pie" height="150px" [data]="tallyData" [options]="tallyChartOptions"></p-chart>
+    </p-card>
+
     <p-card header="DEBUG" class="mt-2">
       <pre>{{proposal | json}}</pre>
+      <pre>{{tally | json}}</pre>
     </p-card>
 
   </ng-container>

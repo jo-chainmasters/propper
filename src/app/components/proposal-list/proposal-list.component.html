@@ -62,6 +62,7 @@
       </td>
       <td>
         <button *ngIf="prop.status === 'PROPOSAL_STATUS_DEPOSIT_PERIOD'" type="button" pButton label="Deposit FUND" (click)="onClickDeposit(prop)"></button>
+<!--        <button type="button" pButton label="Vote" (click)="onClickVote(prop)"></button>-->
         <button *ngIf="prop.status === 'PROPOSAL_STATUS_VOTING_PERIOD'" type="button" pButton label="Vote" (click)="onClickVote(prop)"></button>
 
       </td>
@@ -77,11 +78,33 @@
   <app-new-proposal (onSuccess)="onSuccessSubmitProposal($event)"></app-new-proposal>
 </p-dialog>
 
-<p-dialog header="Deposit to Proposal" [(visible)]="depositDialogVisible">
+<p-dialog
+  [style]="{width: '50vw'}"
+  [modal]="true"
+  header="Deposit to Proposal" [(visible)]="depositDialogVisible">
   <app-deposit [proposal]="selectedProposal" (result)="onResult($event)"></app-deposit>
 </p-dialog>
 
-<p-dialog header="Vote on a Proposal" [(visible)]="voteDialogVisible">
+<p-dialog
+  [style]="{width: '50vw'}"
+  [modal]="true"
+  header="Vote on a Proposal" [(visible)]="voteDialogVisible">
+
+  <div class="grid">
+    <p-card class="col-6">
+      Vote YES if you agree with the proposal.
+    </p-card>
+    <p-card class="col-6">
+      Vote NO if you disagree with the proposal.
+    </p-card>
+    <p-card class="col-6">
+      Vote NO WITH VETO if you believe the proposal is not in the best interests of the Unification community, and it comes with a penalty for the proposer.
+    </p-card>
+    <p-card class="col-6">
+      Vote ABSTAIN if you want to participate in the voting to reach the quorum, but you do not support or oppose the proposal.
+    </p-card>
+  </div>
+
   <ng-template pTemplate="footer">
     <button type="button" pButton label="YES" (click)="vote(VoteOption.VOTE_OPTION_YES)"></button>
     <button type="button" pButton label="NO" (click)="vote(VoteOption.VOTE_OPTION_NO)"></button>

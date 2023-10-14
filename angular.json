@@ -33,6 +33,7 @@
               "src/styles.css"
             ],
             "scripts": [
+              "node_modules/chart.js/dist/chart.js",
               "node_modules/marked/marked.min.js"
             ]
           },
@@ -42,7 +43,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "5mb"
+                  "maximumError": "6mb"
                 },
                 {
                   "type": "anyComponentStyle",

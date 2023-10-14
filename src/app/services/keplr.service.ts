@@ -135,6 +135,11 @@ export class KeplrService {
     return await this.http.get<any>(this.networkService.selectedNetwork.restAPIs[0].url + path).toPromise();
   }
 
+  public getTally(proposalId: number) {
+    const path = '/cosmos/gov/v1/proposals/'+proposalId+'/tally';
+    return this.http.get<any>(this.networkService.selectedNetwork.restAPIs[0].url + path);
+  }
+
   public refreshProposalList() {
     const path = '/cosmos/gov/v1beta1/proposals';
     let params = new HttpParams();
