@@ -7,7 +7,7 @@ export interface NetworkInfo {
   stakeCurrency: Currency,
   feeCurrency: Currency,
   coinType: number,
-  prefix: 'und',
+  prefix: string,
   gasPriceStep: {
     low: number,
     average: number,

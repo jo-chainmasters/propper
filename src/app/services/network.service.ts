@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {UnificationMain} from "../chains/unification-main";
 import {UnificationTest} from "../chains/unification-test";
+import {OsmosisMain} from "../chains/osmosis-main";
 import {NetworkInfo} from "../util/NetworkInfo";
 import {Observable} from "rxjs";
 
@@ -18,6 +19,7 @@ export class NetworkService {
   constructor() {
     this._networkInfos.push(UnificationMain);
     this._networkInfos.push(UnificationTest);
+    this._networkInfos.push(OsmosisMain);
     this.selectedNetwork = UnificationMain;
 
 

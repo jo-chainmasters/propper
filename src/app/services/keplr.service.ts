@@ -106,7 +106,7 @@ export class KeplrService {
       this.refreshProposalList();
       setInterval(() => {
         this.refreshProposalList();
-      }, 1000 * 30);
+      }, 1000 * 60);
     })
   }
 
@@ -143,7 +143,7 @@ export class KeplrService {
   public refreshProposalList() {
     const path = '/cosmos/gov/v1beta1/proposals';
     let params = new HttpParams();
-    params = params.append('pagination.limit', '5');
+    params = params.append('pagination.limit', '50');
 
     this.http.get<any>(this.networkService.selectedNetwork.restAPIs[0].url + path, {params}).subscribe(async proposalsResponse => {
       let proposals: any[] = proposalsResponse.proposals;
