@@ -22,9 +22,9 @@ import {TxResult} from "../util/TxResult";
 import {NetworkService} from "./network.service";
 import {NetworkInfo} from "../util/NetworkInfo";
 import {MsgDeposit, MsgSubmitProposal} from "../../proto_ts/cosmos/gov/v1/tx";
-import {TextProposal, Vote} from "../../proto_ts/cosmos/gov/v1beta1/gov";
+import {TextProposal, Vote as V1BetaVote} from "../../proto_ts/cosmos/gov/v1beta1/gov";
 import {SoftwareUpgradeProposal} from "../../proto_ts/cosmos/upgrade/v1beta1/upgrade";
-import {VoteOption} from "../../proto_ts/cosmos/gov/v1/gov";
+import {Vote, VoteOption, WeightedVoteOption} from "../../proto_ts/cosmos/gov/v1/gov";
 import {ParameterChangeProposal} from "../../proto_ts/cosmos/params/v1beta1/params";
 import {CommunityPoolSpendProposal} from "../../proto_ts/cosmos/distribution/v1beta1/distribution";
 import {AuthInfo, Fee, Tip, TxBody, TxRaw} from "../../proto_ts/cosmos/tx/v1beta1/tx";
@@ -136,7 +136,7 @@ export class KeplrService {
   }
 
   public getTally(proposalId: number) {
-    const path = '/cosmos/gov/v1/proposals/'+proposalId+'/tally';
+    const path = '/cosmos/gov/v1/proposals/' + proposalId + '/tally';
     return this.http.get<any>(this.networkService.selectedNetwork.restAPIs[0].url + path);
   }
 
@@ -295,9 +295,9 @@ export class KeplrService {
   public submitVote(proposal_id: number, vote: VoteOption) {
     const voteMsg = {
       typeUrl: '/cosmos.gov.v1beta1.MsgVote',
-      value: Vote.encode({
+      value: V1BetaVote.encode({
         proposalId: BigInt(proposal_id),
-        option:  vote,
+        option: vote,
         options: [],
         // options: [
         //   {
@@ -308,6 +308,47 @@ export class KeplrService {
         voter: this.account?.address.toString()
       }).finish()
     };
+    //const voteMsgDecoded = V1BetaVote.decode(voteMsg.value);
+    //console.log("VoteDecoded:V1BetaVote ", voteMsgDecoded);
+    let obs = new Observable<TxResult>(observer => {
+      this.window?.keplr?.getKey(this.networkService.selectedNetwork.chainId).then(key => {
+
+        if (this.window?.keplr && key) {
+          this.sendMsgs(
+            this.window?.keplr,
+            key.bech32Address,
+            [voteMsg],
+            this.defaultFee
+          ).subscribe(res => {
+            observer.next(res);
+          });
+        } else {
+          observer.next({success: false, errorCode: -1, errorText: 'General Error', transaction: null});
+        }
+      });
+    });
+    return obs;
+  }
+
+  public submitVoteWeight(proposal_id: number, vote: VoteOption, options: WeightedVoteOption[]) {
+
+
+    const voteMsg = {
+      typeUrl: '/cosmos.gov.v1.MsgVoteWeighted',
+      //  typeUrl: '/cosmos.gov.v1beta1.MsgVoteWeighted',
+      value: Vote.encode({
+        metadata: "",
+        proposalId: BigInt(proposal_id),
+        voter: this.account?.address.toString(),
+        options: options
+
+
+      }).finish()
+    };
+
+
+    //const voteMsgDecoded = Vote.decode(voteMsg.value);
+    //console.log("VoteDecoded ", voteMsgDecoded);
 
     let obs = new Observable<TxResult>(observer => {
       this.window?.keplr?.getKey(this.networkService.selectedNetwork.chainId).then(key => {
