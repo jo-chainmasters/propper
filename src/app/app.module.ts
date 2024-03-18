@@ -37,6 +37,7 @@ import {SplitButtonModule} from "primeng/splitbutton";
 import {MessageModule} from "primeng/message";
 import {MarkdownModule} from "ngx-markdown";
 import {ChartModule} from "primeng/chart";
+import {SliderModule} from 'primeng/slider';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import {ChartModule} from "primeng/chart";
         MessageModule,
         MarkdownModule.forRoot(),
         ChartModule,
+        SliderModule,
     ],
   providers: [HttpClientModule, HttpClient, MessageService],
   bootstrap: []

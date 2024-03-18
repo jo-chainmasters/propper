@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {KeplrService} from "../../services/keplr.service";
 import {Translator} from "../../util/Translator";
 import {MenuItem, MessageService} from "primeng/api";
 import {TxResult} from "../../util/TxResult";
 import {NetworkService} from "../../services/network.service";
-import {VoteOption} from "../../../proto_ts/cosmos/gov/v1/gov";
-import {ProposalStatus} from "../../../proto_ts/cosmos/gov/v1beta1/gov";
+import {VoteOption, WeightedVoteOption} from "../../../proto_ts/cosmos/gov/v1/gov";
+
+
+
 
 @Component({
   selector: 'app-proposal-list',
@@ -21,7 +23,7 @@ export class ProposalListComponent implements OnInit {
   public voteDialogVisible = false;
   public proposalDetailsDialogVisible = false;
   public infoDialogVisible = false;
-
+  public weight = 1.0;
   public availableNetworks: any[] = [];
 
 
@@ -100,6 +102,43 @@ export class ProposalListComponent implements OnInit {
     })
   }
 
+  public voteWeight(vote: VoteOption, weight: number) {
+    if (weight == 1) {
+      this.keplrService.submitVote(this.selectedProposal.proposal_id, vote).subscribe(result => {
+        console.log(result);
+        this.voteDialogVisible = false;
+      })
+    } else {
+      const weightedVoteOption: WeightedVoteOption[]
+        = [{
+        option: VoteOption.VOTE_OPTION_YES,
+        weight: weight.toString(),
+        //weight: "0.45",
+      },
+        {
+          option: VoteOption.VOTE_OPTION_NO,
+          weight: (1 - weight - 0.1).toString(),
+          //weight: "0.45",
+        },
+        {
+          option: VoteOption.VOTE_OPTION_NO_WITH_VETO,
+          weight: "0.05",
+        },
+        {
+          option: VoteOption.VOTE_OPTION_ABSTAIN,
+          weight: "0.05",
+        }
+      ];
+
+      if (this.checkSum(weightedVoteOption)) {
+        this.keplrService.submitVoteWeight(this.selectedProposal.proposal_id, vote, weightedVoteOption).subscribe(result => {
+          console.log(result);
+          this.voteDialogVisible = false;
+        })
+      }
+    }
+  }
+
   public onClickVote(proposal: any) {
     this.selectedProposal = proposal;
     this.voteDialogVisible = true;
@@ -124,4 +163,26 @@ export class ProposalListComponent implements OnInit {
 
   protected readonly Translator = Translator;
   protected readonly VoteOption = VoteOption;
+
+  showSliderValue(event: any) {
+    console.log('Slider Value:' + event.value);
+    if (event?.value) {
+      this.weight = event.value / 100
+    }
+    console.log('Weight:' + this.weight);
+
+  }
+
+  public checkSum(weightedVoteOption: any[]): boolean {
+    let sum = 0.0;
+    weightedVoteOption.forEach((f) => sum += parseFloat(f.weight));
+
+    console.log("Sum of Weight:" + sum);
+
+    if (sum == 1)
+      return true;
+    else
+      return false;
+
+  }
 }
